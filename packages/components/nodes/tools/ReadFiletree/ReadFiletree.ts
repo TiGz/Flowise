@@ -46,12 +46,13 @@ class ReadFiletree_Tools implements INode {
     async init(nodeData: INodeData): Promise<any> {
         const basePath = nodeData.inputs?.basePath as string
         const store = basePath ? new NodeFileStore(basePath) : new NodeFileStore()
-        return new ReadFiletreeTool({ store })
+        return new ReadFiletreeTool({ store, basePath })
     }
 }
 
 interface ReadFiletreeParams extends ToolParams {
     store: BaseFileStore
+    basePath: string
 }
 
 export class ReadFiletreeTool extends StructuredTool {
@@ -59,21 +60,19 @@ export class ReadFiletreeTool extends StructuredTool {
         return 'ReadFiletreeTool'
     }
 
-    schema = z.object({
-        directory_path: z.string().describe('path of the directory')
-    }) as any
-
     name = 'read_filetree'
     description = 'Read file tree from disk, respecting .gitignore'
     store: BaseFileStore
+    basePath: string
 
-    constructor({ store }: ReadFiletreeParams) {
+    constructor({ store, basePath }: ReadFiletreeParams) {
         super()
         this.store = store
+        this.basePath = basePath || process.cwd()
     }
 
-    async _call({ directory_path }: z.infer<typeof this.schema>) {
-        return this.fileTree(directory_path)
+    async _call() {
+        return this.fileTree(this.basePath)
     }
 
     private parseGitignore(rootDir: string): string[] {
@@ -155,7 +154,7 @@ export class ReadFiletreeTool extends StructuredTool {
         }
 
         const tree = this.generateTree(inputDir, [])
-        return `.\n${tree}`
+        return `File tree for ${inputDir}:\n.\n${tree}`
     }
 }
 
