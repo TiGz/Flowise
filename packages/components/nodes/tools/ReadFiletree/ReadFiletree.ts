@@ -45,7 +45,7 @@ class ReadFiletree_Tools implements INode {
 
     async init(nodeData: INodeData): Promise<any> {
         const basePath = nodeData.inputs?.basePath as string
-        const store = basePath ? new NodeFileStore(basePath) : new NodeFileStore()
+        const store = new NodeFileStore(basePath || process.cwd())
         return new ReadFiletreeTool({ store, basePath })
     }
 }
