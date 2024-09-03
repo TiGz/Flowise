@@ -43,6 +43,7 @@ class ReadFile_Tools implements INode {
 
     async init(nodeData: INodeData): Promise<any> {
         const basePath = nodeData.inputs?.basePath as string
+        console.log('ReadFile base path', basePath)
         const store = basePath ? new NodeFileStore(basePath) : new NodeFileStore()
         return new ReadFileTool({ store })
     }
@@ -78,6 +79,7 @@ export class ReadFileTool extends StructuredTool {
     }
 
     async _call({ file_path }: z.infer<typeof this.schema>) {
+        console.log('ReadFile file_path', file_path)
         return await this.store.readFile(file_path)
     }
 }
