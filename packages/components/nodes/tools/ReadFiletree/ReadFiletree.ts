@@ -54,14 +54,14 @@ interface ReadFiletreeParams extends ToolParams {
     store: BaseFileStore
 }
 
-class ReadFiletreeTool extends StructuredTool {
+export class ReadFiletreeTool extends StructuredTool {
     static lc_name() {
         return 'ReadFiletreeTool'
     }
 
     schema = z.object({
         directory_path: z.string().describe('path of the directory')
-    })
+    }) as any
 
     name = 'read_filetree'
     description = 'Read file tree from disk, respecting .gitignore'
