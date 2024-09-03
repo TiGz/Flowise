@@ -56,6 +56,11 @@ interface ReadFiletreeParams extends ToolParams {
 }
 
 export class ReadFiletreeTool extends StructuredTool {
+
+    schema = z.object({
+        
+    }) as any
+
     static lc_name() {
         return 'ReadFiletreeTool'
     }
